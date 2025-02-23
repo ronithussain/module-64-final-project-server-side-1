@@ -39,7 +39,7 @@ async function run() {
         const reviewsCollection = client.db("bistroDB").collection("reviews");
         const cartsCollection = client.db("bistroDB").collection("carts");
 
-        // jwt token related api and functionality start here:
+ // jwt token related api and functionality start here:----------------------------------------
         app.post('/jwt', async (req, res) => {
             const user = req.body;
             const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
@@ -73,12 +73,12 @@ async function run() {
             }
             next();
         }
-        // jwt token related api and functionality end here!
+ // jwt token related api and functionality end here!-----------------------------
 
 
         // userCollection-------------------user---admin------------------------get
         // kono ekta user admin ki na? seta checked kora hocche ai api diye
-        app.get('/users/admin/:email', verifyToken,verifyAdmin, async (req, res) => {
+        app.get('/users/admin/:email', verifyToken, async (req, res) => {
             const email = req.params.email;
             if(email !== req.decoded.email){
                 return RegExp.status(403).send({message: 'unauthorized access'})
@@ -94,7 +94,7 @@ async function run() {
         })
 
         // userCollection----------------------patch for admin
-        app.patch('/users/admin/:id',verifyToken, verifyAdmin, async (req, res) => {
+        app.patch('/users/admin/:id',verifyToken, async (req, res) => {
             const id = req.params.id;
             const filter = { _id: new ObjectId(id) };
             const updateDoc = {
@@ -106,7 +106,7 @@ async function run() {
             res.send(result);
         })
         // userCollection----------------------deleted
-        app.delete('/users/:id',verifyToken, verifyAdmin, async (req, res) => {
+        app.delete('/users/:id',verifyToken, async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await usersCollection.deleteOne(query);
